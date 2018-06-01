@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> Cryptography Toolkit </title>
+		<link rel="stylesheet" href="styles.css">
+	</head>
+	
+	<body>
+		<header>
+			<h1> Nick's Cryptography Toolkit </h1>		
+		</header>
+		
+		<nav>
+			<ul>
+				<li> <a href = "#gcd"> GCD Calculator </a> </li>
+				<li> <a href = "#inverse"> Multiplicative Inverse Calculator </a> </li>
+			</ul>
+			<hr width ="100%">
+		</nav>
+		
+		<article>
+			<div id="gcd">
+				<h1> GCD Calculator </h1>
+				<p> The GCD Calculator finds the greatest common divisor between 2 numbers via the
+				Euclidean Algorithm. </p>
+				
+				<form>
+					<label for= "gcdNum1"> Number 1: </label>
+					<input type="number" id="gcdNum1"> <br/>
+					<label for= "gcdNum2"> Number 2: </label>
+					<input type="number" id="gcdNum2"> <br/> <br/>
+					<input type="button" value="calculate" onclick="calculateGCD()">
+				</form>
+				<p id="resultGCD"> </p>
+				
+				<script>
+					function calculateGCD() {
+						var num1 = Math.abs(document.getElementById("gcdNum1").value);
+						var num2 = Math.abs(document.getElementById("gcdNum2").value);
+						
+						// if the two arguments are not integers, an alternate case is used. 
+						if((num1 != 0) && (num2 != 0)) {
+						
+							//for convenience, we will organize num1 and num2 so that num1 is larger.
+							if(num2 > num1){
+								var temp = num1;
+								num1 = num2;
+								num2 = temp; 
+								}
+							
+							while (num2 > 0) {
+								var r = num1 % num2;
+								num1 = num2;
+								num2 = r;
+							}
+							
+							document.getElementById("resultGCD").innerHTML = num1;
+						}
+						else {
+							document.getElementById("resultGCD").innerHTML = "GCD cannot be calculated for these values."
+						}
+					
+					}
+				</script>
+				<hr align = "center" width = "90%">
+			</div>
+		
+			<div id="inverse">
+				<h1> Multiplicative Inverse Calculator</h1>
+				<p> The multiplicative inverse calculator accepts a number and a modulus value and 
+				calculates the multiplicative inverse via the Extended Euclidean Algorithm. </p>
+				
+				<form>
+					<label for="number"> Invertible number: </label>
+					<input type="number" id="inverseNumber"> <br/>
+					<label for="modulus"> Modulus: </label>
+					<input type="number" id="inverseModulus"> <br/> <br/>
+					<input type="button" value="calculate" onclick="calculateInv()">
+				</form>
+				<p id="resultInv"> </p>
+				
+				<script>
+				
+				function calculateInv() {
+					var mod = document.getElementById("inverseModulus").value;
+					var num = (document.getElementById("inverseNumber").value) % mod;
+					
+					if((num != 0) && (mod != 0)) {
+						var q = [null, null];
+						var r = [mod, num];
+						var s = [1, 0];
+						var t = [0, 1];
+						var i=1;
+						
+						while(r[i] > 1) {
+							i++;
+							q.push(Math.floor(r[i-2]/r[i-1]));
+							r.push(r[i-2] % r[i-1]);
+							s.push(s[i-2] - (s[i-1] * q[i]));
+							t.push(t[i-2] - (t[i-1] * q[i]));
+						}
+						
+						if(r[i] === 1) {
+							inverse= t[i];
+							if(inverse < 0) {
+								inverse =((parseInt(inverse)+parseInt(mod)) % parseInt(mod));
+							}
+							document.getElementById("resultInv").innerHTML = inverse;
+						}
+						else {
+							document.getElementById("resultInv").innerHTML = "This number is not invertible";
+						}
+					}
+					else {
+						document.getElementById("resultInv").innerHTML="These elements cannot be tested for primality";
+					}
+				}
+				</script>
+				
+				<hr align="center" width="90%">
+			</div>
+		</article>
+		
+		<footer>
+			<h4> foots </h4>
+		</footer> 
+	</body>
+</html>
